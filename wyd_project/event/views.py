@@ -23,6 +23,7 @@ class EventListView(ListView):
     template_name = 'event/home.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'Events'
     ordering = ['-date_posted']
+    paginate_by = 5
 
 
 class EventDetailView(DetailView):
