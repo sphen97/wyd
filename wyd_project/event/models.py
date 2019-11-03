@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from rso.models import RSO
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
@@ -17,6 +18,7 @@ class Event(models.Model):
     time = models.TimeField()
     description = models.TextField()
     host = models.ForeignKey(User, on_delete=models.CASCADE)
+    rso = models.ForeignKey(RSO, on_delete=models.CASCADE, null=True, blank=True)
     place = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
     date_posted = models.DateTimeField(default=timezone.now)
 
