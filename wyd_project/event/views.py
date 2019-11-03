@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 from django.views.generic import (
     ListView,
     DetailView,
@@ -23,11 +24,20 @@ def home(request):
 @login_required
 def create_event(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST, instance=request.user)
+        form = CreateEventForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            obj = Event()
+            obj.title = form.cleaned_data['title']
+            obj.date = form.cleaned_data['date']
+            obj.time = form.cleaned_data['time']
+            obj.rso = form.cleaned_data['rso']
+            obj.host = request.user
+            obj.place = form.cleaned_data['place']
+            obj.description = form.cleaned_data['description']
+            obj.date_posted = timezone.now()
+            obj.save()
             messages.success(request, f'Your event has been created!')
-            return redirect('home')
+            return redirect('event-home')
     else:
         form = CreateEventForm(None, instance=request.user )
     return render(request, 'event/event_form.html', {'form': form})

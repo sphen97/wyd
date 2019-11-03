@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.contrib.auth.models import User
 from rso.models import RSO
@@ -8,6 +9,8 @@ class CreateEventForm(forms.ModelForm):
   class Meta:
     model = Event
     fields = ['title', 'date', 'time', 'rso', 'place', 'description']
+
+
   
   def __init__(self, *args, **kwargs):
     super(CreateEventForm, self).__init__(*args, **kwargs)

@@ -17,10 +17,10 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField()
     description = models.TextField()
-    host = models.ForeignKey(User, on_delete=models.CASCADE)
+    host = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     rso = models.ForeignKey(RSO, on_delete=models.CASCADE, null=True, blank=True)
     place = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
-    date_posted = models.DateTimeField(default=timezone.now)
+    date_posted = models.DateTimeField(default=timezone.now, null=True)
 
     def __str__(self):
         return self.title

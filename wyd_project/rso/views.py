@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -15,7 +16,7 @@ def rso_create(request):
     form = RSOForm(request.POST, instance=request.user)
     if form.is_valid():
       form.instance.approved = False
-      form.save()
+      form.save(commit=True)
       messages.success(request, f'An RSO Request has been submitted!')
       return redirect('event-home')
   else:
