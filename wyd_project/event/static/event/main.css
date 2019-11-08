@@ -83,14 +83,32 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+/**Top section of container as 'row' class**/
+.event-details {
+  padding: 10px;
+  border-bottom: 8px solid #e3e3e3;
+  border-top: 8px solid #e3e3e3;
+}
+
+/*col-4 'metadata' containing img and event creation details*/
+.event-metadata {
+  margin-right: 16px;
+  margin-bottom: 16px;
+  margin-top: 30px;
+}
+
 .event-img {
   height: 300px;
   width: 250px;
   object-fit: cover;
-  margin-right: 16px;
-  margin-bottom: 16px;
-  margin-top: 30px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*col-8 'body' containing title and content of event */
+.event-body {
+  padding-top: 1px;
+  margin-left: 6px;
+  margin-top: 4px;
 }
 
 .event-title {
@@ -100,26 +118,15 @@ a.article-title:hover {
   white-space: pre-line;
 }
 
-.event-metadata {
-}
-
-.event-area {
-  border-bottom: 8px solid #e3e3e3;
-  border-top: 8px solid #e3e3e3;
-}
-
-.event-body {
-  padding-top: 1px;
-  padding-bottom: 5px;
-  margin-right: 16px;
-  margin-top: 4px;
-
-}
-
-.map-area {
+/**Bottom section of container as 'row' class**/
+.event-contact {
   margin-top: 2%;
   margin-bottom: 2%;
   padding-top: 5%;
   padding-right: 25%;
   padding-left: 25%;
+}
+
+.map-area {
+
 }

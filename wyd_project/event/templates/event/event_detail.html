@@ -1,34 +1,39 @@
 {% extends "event/base.html" %}
 {% block content %}
-  <article class="content-section row">
+  <article class="content-section container">
 
         <!-- Event Data -->
-        <div class="media event-area">
-          <div class="event-metadata">
-            <img class="rounded event-img" src="../../media/group_sample.jpg"> <!-- need to makeinto template that pulls from RSO media -->
-            <p>
-                <a class="mr-2" href="{% url 'user-events' event.host.username %}">Created by: {{ object.host }}</a>
-                <br>
-                <small class="text-muted">on {{ object.date_posted|date:"F d, Y" }}</small>
-            </p>
-          </div>
+        <div class="event-details row">
+          <div class="media">
+            <div class="event-metadata col-md-4.5">
+              <img class="rounded event-img" src="../../media/group_sample.jpg"> <!-- need to makeinto template that pulls from RSO media -->
+              <p>
+                  <br>
+                  <a class="mr-2" href="{% url 'user-events' event.host.username %}">Created by: {{ object.host }}</a>
+                  <br>
+                  <small class="text-muted">on {{ object.date_posted|date:"F d, Y" }}</small>
+              </p>
+            </div>
 
-          <!-- Description -->
-          <div class="event-body col-md-8">
-            <p>
-              <h2 class="event-title" align="center">{{ object.title }}</h2>
-            </p>
-            <p class="event-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit ipsum mi, nec hendrerit mauris blandit quis. Morbi congue venenatis tellus, nec tempus ipsum malesuada et. Vestibulum a arcu non dolor pretium pulvinar vel nec nisl. Curabitur iaculis vehicula maximus. Nullam non pellentesque quam. Etiam quis feugiat libero, ac auctor neque. Fusce sit amet eros placerat, dapibus odio ut, consequat lectus. Fusce nunc augue, consectetur et massa ut, rhoncus convallis diam. Nam tempor libero a dui malesuada, ac cursus lorem congue. Nullam dictum augue non sapien tincidunt consectetur. In nec sapien fringilla risus iaculis ultricies vehicula eget nisi.{{ object.description }}
-            </p>
-          </div>
-        </div>  
+            <!-- Description -->
+            <div class="event-body col-md-7.5">
+              <p>
+                <h2 class="event-title" align="center">{{ object.title }}</h2>
+              </p>
+              <p class="event-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit ipsum mi, nec hendrerit mauris blandit quis. Morbi congue venenatis tellus, nec tempus ipsum malesuada et. Vestibulum a arcu non dolor pretium pulvinar vel nec nisl. Curabitur iaculis vehicula maximus. Nullam non pellentesque quam. Etiam quis feugiat libero, ac auctor neque. Fusce sit amet eros placerat, dapibus odio ut, consequat lectus. Fusce nunc augue, consectetur et massa ut, rhoncus convallis diam. Nam tempor libero a dui malesuada, ac cursus lorem congue. Nullam dictum augue non sapien tincidunt consectetur. In nec sapien fringilla risus iaculis ultricies vehicula eget nisi.{{ object.description }}
+              </p>
+            </div>
+          </div>  
+        </div>
 
         <!-- Event contact information -->
-        <div class="map-area col-md-12">
-          <div class="card" width="10%;">    
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" width="100%" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-            <div class="card-body">
-              <p class="card-text" align="center"> Events around you! </p>
+        <div class="event-contact row">
+          <div class="map-area col-md-12">
+            <div class="card" width="10%;">    
+              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" width="100%" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+              <div class="card-body">
+                <p class="card-text" align="center"> Events around you! </p>
+              </div>
             </div>
           </div>
         </div>
