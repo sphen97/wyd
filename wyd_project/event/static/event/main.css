@@ -82,3 +82,51 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+/**Top section of container as 'row' class**/
+.event-details {
+  padding: 10px;
+  border-bottom: 8px solid #e3e3e3;
+  border-top: 8px solid #e3e3e3;
+}
+
+/*col-4 'metadata' containing img and event creation details*/
+.event-metadata {
+  margin-right: 16px;
+  margin-bottom: 16px;
+  margin-top: 30px;
+}
+
+.event-img {
+  height: 300px;
+  width: 250px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*col-8 'body' containing title and content of event */
+.event-body {
+  padding-top: 1px;
+  margin-left: 6px;
+  margin-top: 4px;
+}
+
+.event-title {
+  color: #444444;}
+
+.event-content {
+  white-space: pre-line;
+}
+
+/**Bottom section of container as 'row' class**/
+.event-contact {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  padding-top: 5%;
+  padding-right: 25%;
+  padding-left: 25%;
+}
+
+.map-area {
+
+}

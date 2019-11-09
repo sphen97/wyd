@@ -12,6 +12,7 @@ from . import views as view
 
 urlpatterns = [
     path('', EventListView.as_view(), name='event-home'),
+    path('home/', EventListView.as_view(), name='event-home'),
     path('user/<str:username>', UserEventListView.as_view(), name='user-events'),
     path('event/<int:pk>/', EventDetailView.as_view(), name='event-detail'),
     path('event/new/', view.create_event, name='event-create'),

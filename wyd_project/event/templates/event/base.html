@@ -49,6 +49,7 @@
     </header>
     <main role="main" class="container">
       <div class="row">
+        <!-- List of events -->
         <div class="col-md-8">
           {% if messages %}
             {% for message in messages %}
@@ -59,6 +60,7 @@
           {% endif %}
           {% block content %}{% endblock %}
         </div>
+        <!-- Sidebar -->
         <div class="col-md-4">
           <div class="content-section">
             <h3>Our Sidebar</h3>
