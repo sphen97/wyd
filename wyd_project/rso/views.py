@@ -9,15 +9,23 @@ from django.views.generic import (
   CreateView
 )
 from .forms import RSOForm
+from .models import RSO
 
 @login_required
 def rso_create(request):
   if request.method == 'POST':
     form = RSOForm(request.POST, instance=request.user)
     if form.is_valid():
-      form.instance.approved = False
-      form.save(commit=True)
+      instance = RSO.objects.create(name=form.cleaned_data['name'],
+                                    admin=request.user,
+                                    description=form.cleaned_data['description'],
+                                    approved=False)
+
+      instance.members.set(form.cleaned_data['members'])
+      instance.save()
+
       messages.success(request, f'An RSO Request has been submitted!')
+
       return redirect('event-home')
   else:
     form = RSOForm(instance=request.user)
