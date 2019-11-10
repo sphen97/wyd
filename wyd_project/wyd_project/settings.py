@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'event.apps.EventConfig',
     'users.apps.UsersConfig',
     'rso.apps.RsoConfig',
+    'university.apps.UniversityConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -109,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 
