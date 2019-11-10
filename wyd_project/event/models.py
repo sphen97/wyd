@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rso.models import RSO
+from university.models import University
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
@@ -18,9 +19,12 @@ class Event(models.Model):
     time = models.TimeField()
     description = models.TextField()
     host = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    public = models.BooleanField(default=False)
     rso = models.ForeignKey(RSO, on_delete=models.CASCADE, null=True, blank=True)
     place = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
     date_posted = models.DateTimeField(default=timezone.now, null=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

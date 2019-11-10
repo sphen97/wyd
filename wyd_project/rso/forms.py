@@ -10,6 +10,8 @@ class RSOForm(forms.ModelForm):
   # third_member = forms.EmailField()
   # fourth_memeber = forms.EmailField()
 
+  members = forms.ModelMultipleChoiceField(queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple)
+
   class Meta:
     model = RSO
     fields = ['name', 'description', 'members']

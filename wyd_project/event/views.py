@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,8 @@ from django.views.generic import (
 )
 from .models import Event
 from .forms import CreateEventForm
+from users.models import Profile
+from rso.models import RSO
 
 def home(request):
     context = {
@@ -32,9 +35,14 @@ def create_event(request):
             obj.time = form.cleaned_data['time']
             obj.rso = form.cleaned_data['rso']
             obj.host = request.user
+            obj.university = Profile.objects.get(user=request.user).university
             obj.place = form.cleaned_data['place']
             obj.description = form.cleaned_data['description']
             obj.date_posted = timezone.now()
+
+            if obj.rso.admin == request.user:
+                obj.approved = True
+
             obj.save()
             messages.success(request, f'Your event has been created!')
             return redirect('event-home')
@@ -42,12 +50,23 @@ def create_event(request):
         form = CreateEventForm(None, instance=request.user )
     return render(request, 'event/event_form.html', {'form': form})
 
-class EventListView(ListView):
+class EventListView(LoginRequiredMixin, ListView):
     model = Event
     template_name = 'event/home.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'Events'
     ordering = ['-date_posted']
     paginate_by = 5
+
+    def get_queryset(self):
+        profile = get_object_or_404(Profile, user=self.request.user)
+        school = profile.university
+
+        events = Event.objects.none()
+
+        for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
+            events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
+
+        return events.union(Event.objects.filter(Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))))
 
 
 class EventDetailView(DetailView):
