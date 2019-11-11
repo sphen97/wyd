@@ -20,8 +20,7 @@
               <p>
                 <h2 class="event-title" align="center">{{ object.title }}</h2>
               </p>
-              <p class="event-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit ipsum mi, nec hendrerit mauris blandit quis. Morbi congue venenatis tellus, nec tempus ipsum malesuada et. Vestibulum a arcu non dolor pretium pulvinar vel nec nisl. Curabitur iaculis vehicula maximus. Nullam non pellentesque quam. Etiam quis feugiat libero, ac auctor neque. Fusce sit amet eros placerat, dapibus odio ut, consequat lectus. Fusce nunc augue, consectetur et massa ut, rhoncus convallis diam. Nam tempor libero a dui malesuada, ac cursus lorem congue. Nullam dictum augue non sapien tincidunt consectetur. In nec sapien fringilla risus iaculis ultricies vehicula eget nisi.{{ object.description }}
-              </p>
+              <p class="event-content">{{ object.description }}</p>
             </div>
           </div>  
         </div>
@@ -41,9 +40,70 @@
         <!-- Only populate and allow admin to Update or Delete -->
         {% if object.host == user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.id %}">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.id %}">Delete</a>
+            <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a>
           </div>
+
+          <!-- Update modal -->
+          <div class="modal fade" id="updateModal">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title text-center">{{ object.title }}</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body row-md">
+                  <div class="col-md-12">
+                    <p class="event-content">{{ object.description }}</p>
+                  </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button class="btn btn-success" type="submit">Update</button>
+                  <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete modal -->
+          <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title text-center">Delete Event</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body"> 
+                  <form method="POST">
+                      {% csrf_token %}
+                      <fieldset class="form-group">
+                          <h5>Are you sure you want to delete the event <br> "{{ object.title }}?"</h5>
+                      </fieldset>
+                      <div class="form-group">
+                          <button class="btn btn-warning" type="submit">Yes, Delete</button>
+                          <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                      </div>
+                  </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer"></div>
+
+              </div>
+            </div>
+          </div>
+
         {% endif %}
 
   </article>

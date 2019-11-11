@@ -64,22 +64,6 @@ class EventDetailView(DetailView):
 #         form.fields['time'].widget = forms.TimeField()
 #         return super().form_valid(form)
 
-
-class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Event
-    fields = ['title', 'description']
-
-    def form_valid(self, form):
-        form.instance.host = self.request.user
-        return super().form_valid(form)
-
-    def test_func(self):
-        event = self.get_object()
-        if self.request.user == Event.host:
-            return True
-        return False
-
-
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
     success_url = '/'

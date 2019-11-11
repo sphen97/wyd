@@ -98,8 +98,8 @@ a.article-title:hover {
 }
 
 .event-img {
-  height: 300px;
-  width: 250px;
+  max-height: 275px;
+  max-width: 220px;
   object-fit: cover;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -129,4 +129,8 @@ a.article-title:hover {
 
 .map-area {
 
+}
+
+.modal-body {
+  text-align: center;
 }

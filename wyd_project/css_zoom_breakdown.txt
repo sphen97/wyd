@@ -1,0 +1,37 @@
+Bootstrap 4 grid:
+
+	Row: +-------------------------------------------------------------+
+		 |					 |										   |
+		 |					 |										   |
+		 |		col-4		 |					col-8				   |
+		 |					 |										   |
+		 +-------------------------------------------------------------+
+	Row: +-------------------------------------------------------------+
+		 |															   |
+		 |															   |
+		 |							col-12							   |
+		 |															   |
+		 +-------------------------------------------------------------+
+
+		 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1
+		 - - - - - - - 	4	-	4	-	4  - - - - - -
+		 - - - - - - -	4	-	-	-	8  - - - - - -
+		 - - - - - - - - -  6	-	6  - - - - - - - - 
+		 - - - - - - - - - - -	12 - - - - - - - - - -
+
+WYD HTML/CSS breakdown:
+
+	From outside going inward borders
+	- Black: 		entire <body> of base.html
+	- Blue: 		<header class="site-header">
+	- Light-blue: 	<main role="main" class="container">
+		- Orange: 		'row' (since we're only using one, it's the whole page)
+
+			- Green[left]:		"col-md-8" inside base.html "Event details"
+				- Purple[top]:			'row' inside event_detail.html
+					- Gray[left]:				"event-metadata col-md-4.5"
+					- Gray[right]:				"event-body col-md-7.5"
+
+				- Purple[bottom]:		'row' inside event_detail.html
+
+			- Green[right]:		"col-md-4" inside base.html "Our Sidebar"
