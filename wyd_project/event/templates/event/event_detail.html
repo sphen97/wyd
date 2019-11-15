@@ -18,7 +18,7 @@
             <!-- Description -->
             <div class="event-body col-md-7.5">
               <p>
-                <h2 class="event-title" align="center">{{ object.title }}</h2>
+                <h2 class="event-title" align="center" style="color: white; letter-spacing: 3px;">{{ object.title }}</h2>
               </p>
               <p class="event-content">{{ object.description }}</p>
             </div>
@@ -27,13 +27,57 @@
 
         <!-- Event contact information -->
         <div class="event-contact row">
-          <div class="map-area col-md-12">
-            <div class="card" width="10%;">    
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" width="100%" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+          
+          <div class="event-information">
+            <table class="table table-md table-custom">
+              <tr>
+                <td>Event date: <i>{{ event.date }}</i></td>
+                <td>Hosted by: <i>{{ event.rso }}</i></td>
+              </tr>
+              <tr>
+                <td>Event time: <i>{{ event.time }}</i></td>
+                <td>Location: <i>{{ event.location }}</i></td>
+              </tr>              
+            </table>
+          </div>
+
+          <div class="map-area">
+            <div class="card" width="300px">    
+              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
               <div class="card-body">
                 <p class="card-text" align="center"> Events around you! </p>
               </div>
             </div>
+          </div>
+
+        </div>
+
+        <!-- Event comment section with overflow scroll -->
+<!--         <div class="event-comment row">
+          <div class="comment-content">
+              %for event in Events%
+              <div class="comment-list" >
+                <p class="card comment-content"> event.comment </p> 
+              %endfor%
+          </div>
+        </div> -->
+
+        <!-- TEST TEST TEST TEST TEST TEST-->
+        <div class="event-comment row">
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
           </div>
         </div>
 
