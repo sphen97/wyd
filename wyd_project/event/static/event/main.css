@@ -1,11 +1,19 @@
 body {
-  background: #fafafa;
-  color: #333333;
+  background-image: linear-gradient(rgba(95, 120, 138, 0.6), rgba(95, 120, 138, 0.2)), url('../../media/test_background.jpg'); 
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  background-position: center center; 
+  background-attachment: fixed;
   margin-top: 5rem;
+  font-family: helvetica;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
+  font-size: 40px;
+  color: white;
 }
 
 ul {
@@ -13,7 +21,7 @@ ul {
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: rgba(95, 120, 138, 0.4);
 }
 
 .site-header .navbar-nav .nav-link {
@@ -29,7 +37,7 @@ ul {
 }
 
 .content-section {
-  background: #ffffff;
+  background-color: rgb(210, 238, 235, 0.4);
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
@@ -37,7 +45,8 @@ ul {
 }
 
 .article-title {
-  color: #444444;
+  color: white;
+  letter-spacing: 2px;
 }
 
 a.article-title:hover {
@@ -83,11 +92,15 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+.background-image {
+  opacity: 0.7;
+}
+
 /**Top section of container as 'row' class**/
 .event-details {
   padding: 10px;
-  border-bottom: 8px solid #e3e3e3;
-  border-top: 8px solid #e3e3e3;
+  border-bottom: 5px solid #e3e3e3;
+  border-top: 5px solid #e3e3e3;
 }
 
 /*col-4 'metadata' containing img and event creation details*/
@@ -98,8 +111,8 @@ a.article-title:hover {
 }
 
 .event-img {
-  height: 300px;
-  width: 250px;
+  max-height: 275px;
+  max-width: 220px;
   object-fit: cover;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -125,8 +138,45 @@ a.article-title:hover {
   padding-top: 5%;
   padding-right: 25%;
   padding-left: 25%;
+  padding-bottom: 20px;
+  display: inline;
+}
+
+.event-information {
+  padding-left: 50px;
+}
+
+.table-custom td, .table-custom th, .table-custom tr{
+  border: none;
 }
 
 .map-area {
+
+}
+
+.modal-body {
+  text-align: center;
+}
+
+/**Comment section**/
+.event-comment {
+  padding: 5px;
+  padding-top: 10px;
+  border-bottom: 4px solid #e3e3e3;
+  margin-bottom: 20px;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.comment-content {
+  padding: 8px;
+  background-color: rgb(255, 255, 255, 0.6);
+}
+
+.comment-list {
+
+}
+
+.comment-card {
 
 }

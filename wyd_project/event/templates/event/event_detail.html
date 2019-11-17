@@ -18,32 +18,136 @@
             <!-- Description -->
             <div class="event-body col-md-7.5">
               <p>
-                <h2 class="event-title" align="center">{{ object.title }}</h2>
+                <h2 class="event-title" align="center" style="color: white; letter-spacing: 3px;">{{ object.title }}</h2>
               </p>
-              <p class="event-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit ipsum mi, nec hendrerit mauris blandit quis. Morbi congue venenatis tellus, nec tempus ipsum malesuada et. Vestibulum a arcu non dolor pretium pulvinar vel nec nisl. Curabitur iaculis vehicula maximus. Nullam non pellentesque quam. Etiam quis feugiat libero, ac auctor neque. Fusce sit amet eros placerat, dapibus odio ut, consequat lectus. Fusce nunc augue, consectetur et massa ut, rhoncus convallis diam. Nam tempor libero a dui malesuada, ac cursus lorem congue. Nullam dictum augue non sapien tincidunt consectetur. In nec sapien fringilla risus iaculis ultricies vehicula eget nisi.{{ object.description }}
-              </p>
+              <p class="event-content">{{ object.description }}</p>
             </div>
           </div>  
         </div>
 
         <!-- Event contact information -->
         <div class="event-contact row">
-          <div class="map-area col-md-12">
-            <div class="card" width="10%;">    
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" width="100%" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+          
+          <div class="event-information">
+            <table class="table table-md table-custom">
+              <tr>
+                <td>Event date: <i>{{ event.date }}</i></td>
+                <td>Hosted by: <i>{{ event.rso }}</i></td>
+              </tr>
+              <tr>
+                <td>Event time: <i>{{ event.time }}</i></td>
+                <td>Location: <i>{{ event.location }}</i></td>
+              </tr>              
+            </table>
+          </div>
+
+          <div class="map-area">
+            <div class="card" width="300px">    
+              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
               <div class="card-body">
                 <p class="card-text" align="center"> Events around you! </p>
               </div>
             </div>
+          </div>
+
+        </div>
+
+        <!-- Event comment section with overflow scroll -->
+<!--         <div class="event-comment row">
+          <div class="comment-content">
+              %for event in Events%
+              <div class="comment-list" >
+                <p class="card comment-content"> event.comment </p> 
+              %endfor%
+          </div>
+        </div> -->
+
+        <!-- TEST TEST TEST TEST TEST TEST-->
+        <div class="event-comment row">
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
+          </div>
+          <div class="comment-list" >
+            <p class="card comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut neque ac felis gravida gravida. Quisque facilisis mi quis nisi egestas, nec venenatis dolor rutrum. Proin iaculis vestibulum sem. Mauris non eros et tortor gravida dapibus non vel massa.</p> 
           </div>
         </div>
 
         <!-- Only populate and allow admin to Update or Delete -->
         {% if object.host == user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.id %}">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.id %}">Delete</a>
+            <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a>
           </div>
+
+          <!-- Update modal -->
+          <div class="modal fade" id="updateModal">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title text-center">{{ object.title }}</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body row-md">
+                  <div class="col-md-12">
+                    <p class="event-content">{{ object.description }}</p>
+                  </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button class="btn btn-success" type="submit">Update</button>
+                  <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete modal -->
+          <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title text-center">Delete Event</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body"> 
+                  <form method="POST">
+                      {% csrf_token %}
+                      <fieldset class="form-group">
+                          <h5>Are you sure you want to delete the event <br> "{{ object.title }}?"</h5>
+                      </fieldset>
+                      <div class="form-group">
+                          <button class="btn btn-warning" type="submit">Yes, Delete</button>
+                          <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                      </div>
+                  </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer"></div>
+
+              </div>
+            </div>
+          </div>
+
         {% endif %}
 
   </article>
