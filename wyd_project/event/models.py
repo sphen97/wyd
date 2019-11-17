@@ -32,9 +32,13 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('event-detail', kwargs={'pk': self.pk})
 
+
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name = 'comments')
     date_posted = models.DateTimeField(default=timezone.now)
     rating = models.SmallIntegerField()
     text = models.TextField()
+
+    class Meta:
+        ordering = ['-date_posted']

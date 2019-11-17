@@ -166,11 +166,13 @@ a.article-title:hover {
   margin-bottom: 20px;
   overflow-y: auto;
   max-height: 350px;
+  display: block;
 }
 
 .comment-content {
   padding: 8px;
   background-color: rgb(255, 255, 255, 0.6);
+  margin: 8px;
 }
 
 .comment-list {

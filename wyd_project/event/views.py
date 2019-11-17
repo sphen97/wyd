@@ -14,9 +14,11 @@ from django.views.generic import (
     DeleteView
 )
 from .models import Event
-from .forms import CreateEventForm
+from .models import Comment
+from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
+
 
 def home(request):
     context = {
@@ -106,3 +108,20 @@ class UserEventListView(ListView):
 
 def about(request):
     return render(request, 'event/about.html', {'title': 'About'})
+
+
+def add_comment_to_post(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.event = event
+            comment.rating = form.cleaned_data['rating']
+            comment.text = form.cleaned_data['text']
+            comment.save()
+            return redirect('event-detail', pk=event.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'event/add_comment_to_post.html', {'form': form})
