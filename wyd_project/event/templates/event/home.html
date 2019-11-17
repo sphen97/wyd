@@ -2,11 +2,11 @@
 {% block content %}
     {% for event in Events %}
         <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ event.host.profile.image.url }}">
+          <!-- <img class="rounded-circle article-img" src="{{ event.host.profile.image.url }}"> -->
           <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="{% url 'user-events' event.host.username %}">{{ event.host }}</a>
-              <small class="text-muted">{{ event.date_posted|date:"F d, Y" }}</small>
+              <small class="text-muted">posted on: {{ event.date_posted|date:"F d, Y" }}</small>
             </div>
             <p>
               <h2 style="display:inline"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h2>
