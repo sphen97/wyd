@@ -1,23 +1,28 @@
 import datetime
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import SelectDateWidget
 from rso.models import RSO
 from .models import Event
 from .models import Comment
+from django.forms import TimeInput
+
 
 class CreateEventForm(forms.ModelForm):
 
-  class Meta:
-    model = Event
-    fields = ['title', 'date', 'time', 'rso', 'place', 'description']
+    date = forms.DateField(
+        widget=SelectDateWidget()
+    )
+    time = forms.TimeField(help_text='12:00 AM -> 11:59 PM')
 
+    class Meta:
+        model = Event
+        fields = ['title', 'date', 'time', 'rso', 'place', 'description']
 
-  
-  def __init__(self, *args, **kwargs):
-    super(CreateEventForm, self).__init__(*args, **kwargs)
-    user = kwargs.pop('instance', User)
-    self.fields['rso'].queryset = RSO.objects.all().filter(members__pk=user.pk)
-
+    def __init__(self, *args, **kwargs):
+        super(CreateEventForm, self).__init__(*args, **kwargs)
+        user = kwargs.pop('instance', User)
+        self.fields['rso'].queryset = RSO.objects.all().filter(members__pk=user.pk)
 
 
   #commenting form for events
