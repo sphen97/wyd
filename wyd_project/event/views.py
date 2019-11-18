@@ -35,6 +35,7 @@ def create_event(request):
             obj.title = form.cleaned_data['title']
             obj.date = form.cleaned_data['date']
             obj.time = form.cleaned_data['time']
+            obj.public = form.cleaned_data['public']
             obj.rso = form.cleaned_data['rso']
             obj.host = request.user
             obj.university = Profile.objects.get(user=request.user).university
@@ -42,8 +43,13 @@ def create_event(request):
             obj.description = form.cleaned_data['description']
             obj.date_posted = timezone.now()
 
-            if obj.rso.admin == request.user:
+            if obj.rso != None:
+                if obj.rso.admin == request.user:
+                    obj.approved = True
+            elif request.user.is_superuser:
                 obj.approved = True
+            else:
+                obj.approved = False
 
             obj.save()
             messages.success(request, f'Your event has been created!')
