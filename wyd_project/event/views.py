@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
@@ -73,14 +75,15 @@ class EventListView(LoginRequiredMixin, ListView):
 
         for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
             events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
-
+        startdate=datetime.date.today()
+        enddate=datetime.date.max
         return events.union(
             Event.objects.filter(
                 Q(approved=True) & (Q(public=True) | 
                 Q(university=school) & Q(rso__isnull=True)
                 )
             )
-        ).order_by('-time').order_by('-date')
+        ).intersection(Event.objects.filter(date__range=[startdate, enddate])).order_by('time').order_by('date')
 
 
 class EventDetailView(DetailView):
