@@ -74,7 +74,13 @@ class EventListView(LoginRequiredMixin, ListView):
         for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
             events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
 
-        return events.union(Event.objects.filter(Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))))
+        return events.union(
+            Event.objects.filter(
+                Q(approved=True) & (Q(public=True) | 
+                Q(university=school) & Q(rso__isnull=True)
+                )
+            )
+        ).order_by('-time').order_by('-date')
 
 
 class EventDetailView(DetailView):
@@ -109,7 +115,21 @@ class UserEventListView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Event.objects.filter(host=user).order_by('-date_posted')
+        profile = get_object_or_404(Profile, user=self.request.user)
+        school = profile.university
+
+
+        events = Event.objects.none()
+
+        for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
+            events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
+
+        permitted_events = events.union(
+            Event.objects.filter(
+                Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))
+            )
+        )
+        return permitted_events.intersection(Event.objects.filter(host=user)).order_by('-time').order_by('-date')
 
 
 def about(request):
