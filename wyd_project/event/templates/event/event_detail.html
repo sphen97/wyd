@@ -25,54 +25,73 @@
           </div>  
         </div>
 
-        <!-- Event contact information -->
-        <div class="event-contact row">
-          
-          <div class="event-information">
-            <table class="table table-md table-custom">
-              <tr>
-                <td>Event date: <i>{{ event.date }}</i></td>
-                <td>Hosted by: <i>{{ event.rso }}</i></td>
-              </tr>
-              <tr>
-                <td>Event time: <i>{{ event.time }}</i></td>
-                <td>Location: <i>{{ event.location }}</i></td>
-              </tr>              
-            </table>
-          </div>
+        <div class="event-details-bottom row">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="pill" href="#eventInfo"> Event Information </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#eventComments"> Comments </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#mapLocation"> Location </a>
+            </li>
+          </ul>
 
-          <div class="map-area">
-            <div class="card" width="300px">    
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-              <div class="card-body">
-                <p class="card-text" align="center"> Events around you! </p>
+          <div class="tab-content">
+
+            <div class="tab-pane container active" id="eventInfo">
+                <!-- Event contact information -->
+                <div class="event-contact" id="eventInfo">
+                  <div class="event-information">
+                    <div class="card" width="300px">
+                      <div class="card-body" align="center">
+                        <table class="table table-md table-custom">
+                          <tr>
+                            <td>Event date: <i>{{ event.date }}</i></td>
+                            <td>Hosted by: <i>{{ event.rso }}</i></td>
+                          </tr>
+                          <tr>
+                            <td>Event time: <i>{{ event.time }}</i></td>
+                            <td>Location: <i>{{ event.location }}</i></td>
+                          </tr>              
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- Event comment section with overflow scroll -->
+            <div class="tab-pane container fade event-comment" id="eventComments">
+                <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
+                {% for comment in object.comments.all %}
+                  <div class="comment-display">
+                     <div class="card comment-content">
+                         <p> {{comment.author}}</p>
+                         <p> {{comment.text}}</p>
+                         <p> {{comment.rating}}</p>
+                         <p> {{comment.date_posted}}</p>
+                     </div>
+                  </div>
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane container fade event-location" id="mapLocation">
+              <div class="card map-display"> 
+                <a class="btn btn-default" href="{% url 'map-view' pk=event.pk %}"> Location Set </a>
               </div>
             </div>
+
           </div>
 
         </div>
-
-        <!-- Event comment section with overflow scroll -->
-         <div class="event-comment row">
-             <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
-             {% for comment in object.comments.all %}
-             <div class="comment-display">
-                <div class="card comment-content">
-                    <p > {{comment.author}}</p>
-                    <p > {{comment.text}}</p>
-                    <p > {{comment.rating}}</p>
-                    <p > {{comment.date_posted}}</p>
-                </div>
-             </div>
-             {% endfor %}
-        </div>
-
 
         <!-- Only populate and allow admin to Update or Delete -->
         {% if object.host == user %}
           <div>
             <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' pk=event.pk%}">Delete</a>
+            <!-- <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a> -->
           </div>
 
           <!-- Update modal -->
@@ -82,22 +101,23 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title text-center">{{ object.title }}</h4>
+                  <p class="modal-title text-center" style="font-size: 30px">{{ object.title }}</p>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body row-md">
-                  <div class="col-md-12">
-                    <p class="event-content">{{ object.description }}</p>
-                  </div>
-                </div>
+<!--                   <div class="modal-body row-md">
+                    <div class="col-md-12">
+                      <p class="event-content"></p>
+                    </div>
+                  </div> -->
 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                  <button class="btn btn-success" type="submit">Update</button>
-                  <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                </div>
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button class="btn btn-success" type="submit">Update</button>
+                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                  </div>
+                </form>
 
               </div>
             </div>
@@ -110,7 +130,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title text-center">Delete Event</h4>
+                  <h1 class="modal-title text-center" style="color:black; font-size: 30px;">Delete Event</h1>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -119,7 +139,7 @@
                   <form method="POST">
                       {% csrf_token %}
                       <fieldset class="form-group">
-                          <h5>Are you sure you want to delete the event <br> "{{ object.title }}?"</h5>
+                          <p>Are you sure you want to delete the event: <br> "{{ object.title }}?"</p>
                       </fieldset>
                       <div class="form-group">
                           <button class="btn btn-warning" type="submit">Yes, Delete</button>

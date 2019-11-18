@@ -5,6 +5,8 @@ from django.urls import reverse
 from rso.models import RSO
 from university.models import University
 
+from location_field.models.plain import PlainLocationField
+
 class Location(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -42,3 +44,7 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-date_posted']
+
+class PlaceMap(models.Model):
+    city = models.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['city'], zoom=7)

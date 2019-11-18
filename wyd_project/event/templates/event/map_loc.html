@@ -1,0 +1,9 @@
+{% extends "event/base.html" %}
+{% block mapcontent %}
+{{form.media}}
+    <div class="map-section container" id="location-form" >
+    	<h1>New Location</h1>
+        {{ form }}
+        <br><button type="submit" class="save btn btn-default">Send</button>
+  	</div>
+{% endblock %}

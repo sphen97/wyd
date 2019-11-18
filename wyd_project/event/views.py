@@ -15,6 +15,7 @@ from django.views.generic import (
 )
 from .models import Event
 from .models import Comment
+from .models import Location
 from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
@@ -87,6 +88,7 @@ class EventDetailView(DetailView):
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
+    template_name = 'event/event_confirm_delete.html'
     success_url = '/'
 
     def test_func(self):
@@ -125,3 +127,8 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'event/add_comment_to_post.html', {'form': form})
+
+class PlaceCreateView(CreateView):
+    model = Location
+    template_name = 'event/map_loc.html'
+    fields = ('city', 'location',)
