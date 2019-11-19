@@ -13,7 +13,7 @@ from django.views.generic import (
 from users.models import Profile
 from event.models import Event
 from event.models import University
-from .forms import RSOForm
+from .forms import RSOForm, JoinForm
 from .models import RSO
 from django.db.models import Q
 
@@ -54,3 +54,9 @@ class RSOListView(LoginRequiredMixin, ListView):
         myprofile = get_object_or_404(Profile, user=myuser)
 
         return RSO.objects.all().filter(university=myprofile.university)
+
+def join_rso(request, pk):
+  rso = get_object_or_404(RSO, pk=pk)
+  rso.members.add(request.user)
+  messages.success(request, f'Your successfully joined an RSO!')
+  return redirect('event-home')

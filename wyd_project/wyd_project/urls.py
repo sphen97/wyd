@@ -24,6 +24,7 @@ from rso.views import RSOListView
 
 urlpatterns = [
     path('rso/create/', rso_views.rso_create, name='rso-create'),
+    path('rso/join/<int:pk>', rso_views.join_rso, name='join-rso'),
     path('my/<str:username>/rsos', RSOListView.as_view(), name='rso-listview'),
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),

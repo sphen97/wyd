@@ -8,7 +8,7 @@
               <a class="mr-2" href="{% url 'rso-events' rso.id %}">{{ rso.admin }}</a>
             </div>
             <p>
-              <h2 style="display:inline"><a class="article-title" href="{% url 'rso-events' rso.id %}">{{ rso.name }}</a></h2>
+              <h2 style="display:inline"><a class="article-title" href="{% url 'join-rso' rso.pk %}">{{ rso.name }}</a></h2>
             </p>
             <p class="article-content">{{ rso.description }}</p>
           </div>
