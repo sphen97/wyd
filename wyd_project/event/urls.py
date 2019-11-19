@@ -6,7 +6,8 @@ from .views import (
     # EventUpdateView,
     EventDeleteView,
     UserEventListView,
-    RSOEventListView
+    RSOEventListView,
+    UniversityEventListView
 )
 from . import views
 from . import views as view
@@ -20,5 +21,6 @@ urlpatterns = [
     path('event/<int:pk>/delete/', EventDeleteView.as_view(), name='event-delete'),
     path('about/', views.about, name='event-about'),
     path('rso/<int:pk>/', RSOEventListView.as_view(), name='rso-events'),
+    path('university/<int:pk>', UniversityEventListView.as_view(), name='university-events'),
     path('event/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_post'),
 ]

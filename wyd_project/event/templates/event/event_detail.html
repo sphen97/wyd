@@ -36,7 +36,7 @@
               </tr>
               <tr>
                 <td>Event time: <i>{{ event.time }}</i></td>
-                <td>Location: <i>{{ event.location }}</i></td>
+                <td>University: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
               </tr>              
             </table>
           </div>
