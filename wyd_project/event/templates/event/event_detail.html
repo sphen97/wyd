@@ -62,7 +62,9 @@
                     <p > {{comment.text}}</p>
                     <p > {{comment.rating}}</p>
                     <p > {{comment.date_posted}}</p>
+                    {% if comment.author == request.user %}
                     <a class="btn btn-danger btn-sm mt-1" href="{% url 'comment_delete' pk=comment.pk%}">Delete</a>
+                    {% endif %}
                 </div>
              </div>
              {% endfor %}
