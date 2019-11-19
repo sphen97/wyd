@@ -9,7 +9,7 @@ from .views import (
     PlaceCreateView,
     RSOEventListView,
     UniversityEventListView,
-)
+    CommentDeleteView)
 from . import views
 from . import views as view
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path('about/', views.about, name='event-about'),
     path('rso/<int:pk>/', RSOEventListView.as_view(), name='rso-events'),
     path('university/<int:pk>', UniversityEventListView.as_view(), name='university-events'),
+    path('event/comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
     path('event/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_post'),
     path('event/<int:pk>/place', PlaceCreateView.as_view(), name='map-view'),
 ]

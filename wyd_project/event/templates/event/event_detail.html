@@ -89,6 +89,22 @@
 
           </div>
 
+         <!-- Event comment section with overflow scroll -->
+         <div class="event-comment row">
+             <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
+             {% for comment in object.comments.all %}
+             <div class="comment-display">
+                <div class="card comment-content">
+                    <p > {{comment.author}}</p>
+                    <p > {{comment.text}}</p>
+                    <p > {{comment.rating}}</p>
+                    <p > {{comment.date_posted}}</p>
+                    {% if comment.author == request.user %}
+                    <a class="btn btn-danger btn-sm mt-1" href="{% url 'comment_delete' pk=comment.pk%}">Delete</a>
+                    {% endif %}
+                </div>
+             </div>
+             {% endfor %}
         </div>
 
         <!-- Only populate and allow admin to Update or Delete -->
