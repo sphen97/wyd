@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
@@ -36,6 +38,7 @@ def create_event(request):
             obj.title = form.cleaned_data['title']
             obj.date = form.cleaned_data['date']
             obj.time = form.cleaned_data['time']
+            obj.public = form.cleaned_data['public']
             obj.rso = form.cleaned_data['rso']
             obj.host = request.user
             obj.university = Profile.objects.get(user=request.user).university
@@ -43,8 +46,13 @@ def create_event(request):
             obj.description = form.cleaned_data['description']
             obj.date_posted = timezone.now()
 
-            if obj.rso.admin == request.user:
+            if obj.rso != None:
+                if obj.rso.admin == request.user:
+                    obj.approved = True
+            elif request.user.is_superuser:
                 obj.approved = True
+            else:
+                obj.approved = False
 
             obj.save()
             messages.success(request, f'Your event has been created!')
@@ -68,8 +76,15 @@ class EventListView(LoginRequiredMixin, ListView):
 
         for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
             events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
-
-        return events.union(Event.objects.filter(Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))))
+        startdate=datetime.date.today()
+        enddate=datetime.date.max
+        return events.union(
+            Event.objects.filter(
+                Q(approved=True) & (Q(public=True) | 
+                Q(university=school) & Q(rso__isnull=True)
+                )
+            )
+        ).intersection(Event.objects.filter(date__range=[startdate, enddate])).order_by('time').order_by('date')
 
 
 class EventDetailView(DetailView):
@@ -105,7 +120,21 @@ class UserEventListView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Event.objects.filter(host=user).order_by('-date_posted')
+        profile = get_object_or_404(Profile, user=self.request.user)
+        school = profile.university
+
+
+        events = Event.objects.none()
+
+        for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
+            events = events.union(Event.objects.filter(Q(approved=True) & Q(rso=myRSO)))
+
+        permitted_events = events.union(
+            Event.objects.filter(
+                Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))
+            )
+        )
+        return permitted_events.intersection(Event.objects.filter(host=user)).order_by('-time').order_by('-date')
 
 
 def about(request):

@@ -16,7 +16,7 @@ class CreateEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ['title', 'date', 'time', 'rso', 'place', 'description']
+        fields = ['title', 'date', 'time', 'public', 'rso', 'place', 'description']
 
     def __init__(self, *args, **kwargs):
         super(CreateEventForm, self).__init__(*args, **kwargs)
