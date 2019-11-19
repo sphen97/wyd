@@ -47,6 +47,6 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-date_posted']
 
-class PlaceMap(models.Model):
+class Place(models.Model):
     city = models.CharField(max_length=255)
     location = PlainLocationField(based_fields=['city'], zoom=7)

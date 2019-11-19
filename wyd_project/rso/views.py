@@ -1,15 +1,20 @@
 import datetime
 from django import forms
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic import (
-  CreateView
+  CreateView,
+  ListView
 )
+from users.models import Profile
+from event.models import Event
 from .forms import RSOForm
 from .models import RSO
+from django.db.models import Q
 
 @login_required
 def rso_create(request):

@@ -1,5 +1,4 @@
 import datetime
-
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
@@ -17,10 +16,11 @@ from django.views.generic import (
 )
 from .models import Event
 from .models import Comment
-from .models import Location
+from .models import Location, Place
 from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
+from university.models import University
 
 
 def home(request):
@@ -90,17 +90,6 @@ class EventListView(LoginRequiredMixin, ListView):
 class EventDetailView(DetailView):
     model = Event
 
-
-# class EventCreateView(LoginRequiredMixin, CreateView):
-#     model = Event
-#     fields = ['title', 'date', 'time', 'place', 'description']
-
-#     def form_valid(self, form):
-#         form.instance.host = self.request.user
-#         form.fields['date'].widget = forms.DateField()
-#         form.fields['time'].widget = forms.TimeField()
-#         return super().form_valid(form)
-
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
     template_name = 'event/event_confirm_delete.html'
@@ -158,6 +147,53 @@ def add_comment_to_post(request, pk):
     return render(request, 'event/add_comment_to_post.html', {'form': form})
 
 class PlaceCreateView(CreateView):
-    model = Location
+    model = Place
     template_name = 'event/map_loc.html'
     fields = ('city', 'location',)
+
+class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Event
+    template_name = 'event/rso_events.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'events'
+    paginate_by = 5
+    
+    #NOT WORKING!!!
+    def test_func(self):
+        myRSO = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+        if myRSO.members.get(User=self.pk):
+            return True
+        return False
+
+    def get_queryset(self):
+        myRSO = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+
+        return Event.objects.filter(
+            Q(approved=True) & Q(rso=myRSO)
+            ).order_by('time').order_by('date')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['rso'] = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+        return data
+
+class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Event
+    template_name = 'event/university_events.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'events'
+    paginate_by = 5
+    
+    #NOT WORKING!!!
+    def test_func(self):
+        myUniversity = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        if myUniversity.members.get(User=self.pk):
+            return True
+        return False
+
+    def get_queryset(self):
+        myUniversity = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return Event.objects.filter(Q(approved=True) & Q(university=myUniversity)).order_by('time').order_by('date')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['university'] = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return data

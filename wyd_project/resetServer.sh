@@ -32,7 +32,8 @@ python3 manage.py migrate
 ./creatingRSOs.sh
 #event creation
 ./creatingEvents.sh
-
+#location creation
+./creatingLocations.sh
 #start server
 echo "starting server"
 python3 manage.py runserver
