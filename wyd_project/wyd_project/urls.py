@@ -23,6 +23,7 @@ from rso import views as rso_views
 
 urlpatterns = [
     path('rso/create/', rso_views.rso_create, name='rso-create'),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
     # path('profile/', user_views.profile, name='profile'),
