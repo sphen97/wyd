@@ -1,5 +1,5 @@
 import datetime
-
+from django import forms
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -12,10 +12,16 @@ from location_field.models.plain import PlainLocationField
 class Location(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    # Going to need to add Lattitude + Longitude stuff here
 
     def __str__(self):
         return self.name
+
+class Place(models.Model):
+    city = models.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['city'], zoom=7)
+
+    def __str__(self):
+        return self.location
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
@@ -27,6 +33,7 @@ class Event(models.Model):
     public = models.BooleanField(default=False)
     rso = models.ForeignKey(RSO, on_delete=models.CASCADE, null=True, blank=True)
     place = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    coord = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
     date_posted = models.DateTimeField(default=timezone.now, null=True)
     approved = models.BooleanField(default=False)
 
@@ -47,6 +54,3 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-date_posted']
 
-class Place(models.Model):
-    city = models.CharField(max_length=255)
-    location = PlainLocationField(based_fields=['city'], zoom=7)

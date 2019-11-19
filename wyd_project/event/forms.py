@@ -7,8 +7,9 @@ from .models import Event
 from .models import Comment
 from django.forms import TimeInput
 
+from location_field.forms.plain import PlainLocationField
+
 class CreateEventForm(forms.ModelForm):
-# help_text='12:00 AM -> 11:59 PM', 
     date = forms.DateField(
         widget=SelectDateWidget()
     )

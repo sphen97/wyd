@@ -61,6 +61,20 @@ def create_event(request):
         form = CreateEventForm(None, instance=request.user )
     return render(request, 'event/event_form.html', {'form': form})
 
+class PlaceCreateView(CreateView):
+    model = Place
+    template_name = 'event/coord_update_form.html'
+    success_url = '/'
+    fields = ('city', 'location',)
+
+    def set_coords(request):
+        if request.method == 'POST':
+            obj = Event()
+            obj.coord = model.location
+            obj.save()
+            messages.success(request, f'Location coordinates have been saved!')
+            return redirect('event-home')
+
 class EventListView(LoginRequiredMixin, ListView):
     model = Event
     template_name = 'event/home.html'  # <app>/<model>_<viewtype>.html
@@ -90,7 +104,7 @@ class EventListView(LoginRequiredMixin, ListView):
 class EventDetailView(DetailView):
     model = Event
 
-class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class EventDeleteView(DeleteView):
     model = Event
     template_name = 'event/event_confirm_delete.html'
     success_url = '/'
@@ -129,7 +143,6 @@ class UserEventListView(ListView):
 def about(request):
     return render(request, 'event/about.html', {'title': 'About'})
 
-
 def add_comment_to_post(request, pk):
     event = get_object_or_404(Event, pk=pk)
     if request.method == "POST":
@@ -145,11 +158,6 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'event/add_comment_to_post.html', {'form': form})
-
-class PlaceCreateView(CreateView):
-    model = Place
-    template_name = 'event/map_loc.html'
-    fields = ('city', 'location',)
 
 class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Event

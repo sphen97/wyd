@@ -9,9 +9,16 @@
               <img class="rounded event-img" src="../../media/group_sample.jpg"> <!-- need to makeinto template that pulls from RSO media -->
               <p>
                   <br>
-                  <a class="mr-2" href="{% url 'user-events' event.host.username %}">Created by: {{ object.host }}</a>
+                  <a class="mr-2" href="{% url 'user-events' event.host.username %}" style="color:white">Created by: {{ object.host }}</a>
                   <br>
-                  <small class="text-muted">on {{ object.date_posted|date:"F d, Y" }}</small>
+                  <small class="event-creation-date" style="color:white">on {{ object.date_posted|date:"F d, Y" }}</small>
+                    <!-- Only populate and allow admin to Update or Delete -->
+                    {% if object.host == user %}
+                      <div>
+                        <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' pk=event.pk%}">Delete</a>
+                      </div>
+                    {% endif %}
               </p>
             </div>
 
@@ -33,9 +40,11 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="pill" href="#eventComments"> Comments </a>
             </li>
+            {% if object.host == user %}
             <li class="nav-item">
               <a class="nav-link" data-toggle="pill" href="#mapLocation"> Location </a>
             </li>
+            {% endif %}
           </ul>
 
           <div class="tab-content">
@@ -61,16 +70,20 @@
                   </div>
                 </div>
             </div>
+
             <!-- Event comment section with overflow scroll -->
             <div class="tab-pane container fade event-comment" id="eventComments">
                 <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
                 {% for comment in object.comments.all %}
                   <div class="comment-display">
                      <div class="card comment-content">
-                         <p> {{comment.author}}</p>
-                         <p> {{comment.text}}</p>
-                         <p> {{comment.rating}}</p>
-                         <p> {{comment.date_posted}}</p>
+                         <p>{{comment.author}}</p>
+                         <p>{{comment.text}}</p>
+                         <p>{{comment.rating}}</p>
+                         <p>{{comment.date_posted}}</p>
+                          {% if object.comment.author == user %}
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'comment_delete' pk=event.pk%}">Delete</a>
+                          {% endif %}
                      </div>
                   </div>
                 {% endfor %}
@@ -78,84 +91,13 @@
 
             <div class="tab-pane container fade event-location" id="mapLocation">
               <div class="card map-display"> 
-                <a class="btn btn-default" href="{% url 'map-view' pk=event.pk %}"> Location Set </a>
+                <a class="btn btn-default" href="{% url 'map-view' pk=event.pk %}"> Set Location </a>
               </div>
             </div>
 
           </div>
 
         </div>
-
-        <!-- Only populate and allow admin to Update or Delete -->
-        {% if object.host == user %}
-          <div>
-            <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' pk=event.pk%}">Delete</a>
-            <!-- <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a> -->
-          </div>
-
-          <!-- Update modal -->
-          <div class="modal fade" id="updateModal">
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <p class="modal-title text-center" style="font-size: 30px">{{ object.title }}</p>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-<!--                   <div class="modal-body row-md">
-                    <div class="col-md-12">
-                      <p class="event-content"></p>
-                    </div>
-                  </div> -->
-
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">Update</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                  </div>
-                </form>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Delete modal -->
-          <div class="modal fade" id="deleteModal">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h1 class="modal-title text-center" style="color:black; font-size: 30px;">Delete Event</h1>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body"> 
-                  <form method="POST">
-                      {% csrf_token %}
-                      <fieldset class="form-group">
-                          <p>Are you sure you want to delete the event: <br> "{{ object.title }}?"</p>
-                      </fieldset>
-                      <div class="form-group">
-                          <button class="btn btn-warning" type="submit">Yes, Delete</button>
-                          <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                      </div>
-                  </form>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer"></div>
-
-              </div>
-            </div>
-          </div>
-
-        {% endif %}
-
   </article>
 {% endblock content %}
+
