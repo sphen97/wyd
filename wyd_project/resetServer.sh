@@ -34,7 +34,8 @@ python3 manage.py migrate
 ./creatingLocations.sh
 #event creation
 ./creatingEvents.sh
-
+#comment creation
+./creatingComments.sh
 #start server
 echo "starting server"
 python3 manage.py runserver

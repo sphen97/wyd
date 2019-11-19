@@ -1,9 +1,9 @@
 from django.urls import path
 from .views import (
+  RSOEventListView,
   RSOCreateView
 )
-from . import views
 
 urlpatterns = [
-  path('rso/create', RSOCreateView.as_view(), name='rso-create')
+  path('rso/create/', RSOCreateView.as_view(), name='rso-create'),
 ]

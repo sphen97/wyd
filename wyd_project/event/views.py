@@ -20,6 +20,7 @@ from .models import Comment
 from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
+from university.models import University
 
 
 def home(request):
@@ -89,17 +90,6 @@ class EventListView(LoginRequiredMixin, ListView):
 class EventDetailView(DetailView):
     model = Event
 
-
-# class EventCreateView(LoginRequiredMixin, CreateView):
-#     model = Event
-#     fields = ['title', 'date', 'time', 'place', 'description']
-
-#     def form_valid(self, form):
-#         form.instance.host = self.request.user
-#         form.fields['date'].widget = forms.DateField()
-#         form.fields['time'].widget = forms.TimeField()
-#         return super().form_valid(form)
-
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
     success_url = '/'
@@ -120,7 +110,6 @@ class UserEventListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         profile = get_object_or_404(Profile, user=self.request.user)
         school = profile.university
-
 
         events = Event.objects.none()
 
@@ -154,3 +143,70 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'event/add_comment_to_post.html', {'form': form})
+
+
+class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Event
+    template_name = 'event/rso_events.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'events'
+    paginate_by = 5
+    
+    #NOT WORKING!!!
+    def test_func(self):
+        myRSO = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+        if myRSO.members.get(User=self.pk):
+            return True
+        return False
+
+    def get_queryset(self):
+        myRSO = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+
+        return Event.objects.filter(
+            Q(approved=True) & Q(rso=myRSO)
+            ).order_by('time').order_by('date')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['rso'] = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+        return data
+
+
+class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Event
+    template_name = 'event/university_events.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'events'
+    paginate_by = 5
+    
+    #NOT WORKING!!!
+    def test_func(self):
+        myUniversity = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        if myUniversity.members.get(User=self.pk):
+            return True
+        return False
+
+    def get_queryset(self):
+        myUniversity = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return Event.objects.filter(Q(approved=True) & Q(university=myUniversity)).order_by('time').order_by('date')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['university'] = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return data
+
+
+class CommentDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Comment
+    template_name = 'event/comment_confirm_delete.html'
+    success_url = '/'
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == Comment.author:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        my_comment = get_object_or_404(Comment, pk=self.kwargs.get('pk'))
+        data['event'] = my_comment.event
+        return data
