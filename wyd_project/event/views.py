@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 from .models import Event
 from .models import Comment
-from .models import Location
+from .models import Location, Place
 from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
@@ -129,6 +129,6 @@ def add_comment_to_post(request, pk):
     return render(request, 'event/add_comment_to_post.html', {'form': form})
 
 class PlaceCreateView(CreateView):
-    model = Location
+    model = Place
     template_name = 'event/map_loc.html'
     fields = ('city', 'location',)
