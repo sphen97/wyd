@@ -30,10 +30,11 @@ python3 manage.py migrate
 ./creatingUsers.sh
 #rso creation
 ./creatingRSOs.sh
-#event creation
-./creatingEvents.sh
 #location creation
 ./creatingLocations.sh
+#event creation
+./creatingEvents.sh
+
 #start server
 echo "starting server"
 python3 manage.py runserver

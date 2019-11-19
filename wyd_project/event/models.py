@@ -7,6 +7,7 @@ from django.urls import reverse
 from rso.models import RSO
 from university.models import University
 
+
 class Location(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
