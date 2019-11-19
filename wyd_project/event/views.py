@@ -154,3 +154,30 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'event/add_comment_to_post.html', {'form': form})
+
+
+class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Event
+    template_name = 'event/rso_events.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'events'
+    paginate_by = 5
+
+    def test_func(self):
+        if self.get_object().filter(member__pk=self.request.user.pk).exists():
+            return True
+        return False
+
+    def get_queryset(self):
+        # user = get_object_or_404(User, username=self.kwargs.get('username'))
+        # profile = get_object_or_404(Profile, user=self.request.user)
+        # school = profile.university
+        myRSO = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+
+        return Event.objects.filter(
+            Q(approved=True) & Q(rso=myRSO)
+            ).intersection(Event.objects.filter(rso=myRSO)).order_by('time').order_by('date')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['rso'] = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
+        return data
