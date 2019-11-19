@@ -37,6 +37,7 @@
               {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'event-create' %}">New Event</a>
                 <a class="nav-item nav-link" href="{% url 'rso-create' %}">New RSO</a>
+                <a class="nav-item nav-link" href="{% url 'rso-listview' user.username %}">Join RSOs</a>
                 <a class="nav-item nav-link" href="{% url 'user-events' user.username %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}

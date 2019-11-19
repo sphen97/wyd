@@ -20,9 +20,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
 from rso import views as rso_views
+from rso.views import RSOListView
 
 urlpatterns = [
     path('rso/create/', rso_views.rso_create, name='rso-create'),
+    path('rso/join/<int:pk>', rso_views.join_rso, name='join-rso'),
+    path('my/<str:username>/rsos', RSOListView.as_view(), name='rso-listview'),
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
     # path('profile/', user_views.profile, name='profile'),

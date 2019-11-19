@@ -58,12 +58,17 @@
                         <table class="table table-md table-custom">
                           <tr>
                             <td>Event date: <i>{{ event.date }}</i></td>
+                            {% if event.rso == None %}
+                            <td>Hosted by: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
+                            {% else %}
                             <td>Hosted by: <i><a href="{% url 'rso-events' event.rso.id %}">{{ event.rso }}</a></i></td>
+                            {% endif %}
                           </tr>
                           <tr>
                             <td>Event time: <i>{{ event.time }}</i></td>
                             <td>University: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
-                          </tr>              
+                          </tr> 
+                            <td>Location: <i>{{ event.place.name }}</i></td>        
                         </table>
                       </div>
                     </div>
@@ -97,6 +102,22 @@
 
           </div>
 
+         <!-- Event comment section with overflow scroll -->
+         <div class="event-comment row">
+             <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
+             {% for comment in object.comments.all %}
+             <div class="comment-display">
+                <div class="card comment-content">
+                    <p > {{comment.author}}</p>
+                    <p > {{comment.text}}</p>
+                    <p > {{comment.rating}}</p>
+                    <p > {{comment.date_posted}}</p>
+                    {% if comment.author == request.user %}
+                    <a class="btn btn-danger btn-sm mt-1" href="{% url 'comment_delete' pk=comment.pk%}">Delete</a>
+                    {% endif %}
+                </div>
+             </div>
+             {% endfor %}
         </div>
   </article>
 {% endblock content %}
