@@ -8,7 +8,7 @@ from .views import (
     UserEventListView,
     PlaceCreateView,
     RSOEventListView,
-    UniversityEventListView
+    UniversityEventListView,
 )
 from . import views
 from . import views as view

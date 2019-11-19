@@ -12,6 +12,7 @@ from django.views.generic import (
 )
 from users.models import Profile
 from event.models import Event
+from event.models import University
 from .forms import RSOForm
 from .models import RSO
 from django.db.models import Q
@@ -25,6 +26,7 @@ def rso_create(request):
           obj.admin = request.user
           obj.name = form.cleaned_data['name']
           obj.description = form.cleaned_data['description']
+          obj.university = get_object_or_404(Profile, user=request.user).university
           obj.approved = False
           obj.save()
           obj.members.add(request.user)
@@ -39,3 +41,16 @@ def rso_create(request):
   else:
       form = RSOForm()
   return render(request, 'rso/create.html', {'form': form})
+
+class RSOListView(LoginRequiredMixin, ListView):
+    model = RSO
+    template_name = 'rso/rso_list.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'RSOs'
+    ordering = ['name']
+    paginate_by = 5
+
+    def get_queryset(self):
+        myuser = get_object_or_404(User, username=self.kwargs.get('username'))
+        myprofile = get_object_or_404(Profile, user=myuser)
+
+        return RSO.objects.all().filter(university=myprofile.university)

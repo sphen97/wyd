@@ -49,12 +49,17 @@
                         <table class="table table-md table-custom">
                           <tr>
                             <td>Event date: <i>{{ event.date }}</i></td>
+                            {% if event.rso == None %}
+                            <td>Hosted by: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
+                            {% else %}
                             <td>Hosted by: <i><a href="{% url 'rso-events' event.rso.id %}">{{ event.rso }}</a></i></td>
+                            {% endif %}
                           </tr>
                           <tr>
                             <td>Event time: <i>{{ event.time }}</i></td>
                             <td>University: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
-                          </tr>              
+                          </tr> 
+                            <td>Location: <i>{{ event.place.name }}</i></td>        
                         </table>
                       </div>
                     </div>
