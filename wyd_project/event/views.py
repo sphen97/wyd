@@ -111,7 +111,6 @@ class UserEventListView(ListView):
         profile = get_object_or_404(Profile, user=self.request.user)
         school = profile.university
 
-
         events = Event.objects.none()
 
         for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
@@ -171,6 +170,7 @@ class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
         data['rso'] = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
         return data
 
+
 class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Event
     template_name = 'event/university_events.html'  # <app>/<model>_<viewtype>.html
@@ -191,4 +191,22 @@ class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin)
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['university'] = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return data
+
+
+class CommentDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Comment
+    template_name = 'event/comment_confirm_delete.html'
+    success_url = '/'
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == Comment.author:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        my_comment = get_object_or_404(Comment, pk=self.kwargs.get('pk'))
+        data['event'] = my_comment.event
         return data
