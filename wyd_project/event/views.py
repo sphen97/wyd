@@ -21,6 +21,8 @@ from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
 from university.models import University
+import facebook
+from django.core.mail import send_mail
 
 
 def home(request):
@@ -55,6 +57,17 @@ def create_event(request):
                 obj.approved = False
 
             obj.save()
+
+            if obj.approved == True:
+                for user in obj.rso.members.all():
+                    send_mail(
+                        obj.title,
+                        obj.description,
+                        obj.rso.admin.email,
+                        [user.email],
+                        fail_silently=True,
+                    )
+
             messages.success(request, f'Your event has been created!')
             return redirect('event-home')
     else:
