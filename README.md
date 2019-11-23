@@ -7,8 +7,10 @@ Database Systems - UCF Fall 2019 Term Project
 - [Kenny Cheng](https://github.com/Chengalang)
 
 ## Recommended Process For Testing
-
-in the terminal bash run the 'resetServer.sh' script
+in file '[creatingSuperUser.sh](https://github.com/sphen97/wyd/blob/master/wyd_project/creatingSuperUser.sh)' Fill in your email
+in the terminal bash run the '[resetServer.sh](https://github.com/sphen97/wyd/blob/master/wyd_project/resetServer.sh)' script
+the first super admin is 'admin' with the pass word being 'adminpass'
+a generic user is 'foo' with password is 'bar'
 
 ## Requirements 
 python 3 
