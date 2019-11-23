@@ -21,7 +21,6 @@ from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
 from university.models import University
-import facebook
 from django.core.mail import send_mail
 
 
