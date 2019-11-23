@@ -148,7 +148,7 @@ class UserEventListView(ListView):
                 Q(approved=True) & (Q(public=True) | Q(university=school) & Q(rso__isnull=True))
             )
         )
-        return permitted_events.intersection(Event.objects.filter(host=user)).order_by('-time').order_by('-date')
+        return permitted_events.intersection(Event.objects.filter(host=user)).order_by('time').order_by('date')
 
 
 def about(request):
