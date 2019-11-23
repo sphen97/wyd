@@ -9,9 +9,16 @@
               <img class="rounded event-img" src="../../media/group_sample.jpg"> <!-- need to makeinto template that pulls from RSO media -->
               <p>
                   <br>
-                  <a class="mr-2" href="{% url 'user-events' event.host.username %}">Created by: {{ object.host }}</a>
+                  <a class="mr-2" href="{% url 'user-events' event.host.username %}" style="color:white">Created by: {{ object.host }}</a>
                   <br>
-                  <small class="text-muted">on {{ object.date_posted|date:"F d, Y" }}</small>
+                  <small class="event-creation-date" style="color:white">on {{ object.date_posted|date:"F d, Y" }}</small>
+                    <!-- Only populate and allow admin to Update or Delete -->
+                    {% if object.host == user %}
+                      <div>
+                        <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' pk=event.pk%}">Delete</a>
+                      </div>
+                    {% endif %}
               </p>
             </div>
 
@@ -25,34 +32,77 @@
           </div>  
         </div>
 
-        <!-- Event contact information -->
-        <div class="event-contact row">
-          
-          <div class="event-information">
-            <table class="table table-md table-custom">
-              <tr>
-                <td>Event date: <i>{{ event.date }}</i></td>
-                <td>Hosted by: <i><a href="{% url 'rso-events' event.rso.id %}">{{ event.rso }}</a></i></td>
-              </tr>
-              <tr>
-                <td>Event time: <i>{{ event.time }}</i></td>
-                <td>University: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
-              </tr>              
-            </table>
-          </div>
+        <div class="event-details-bottom row">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="pill" href="#eventInfo"> Event Information </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#eventComments"> Comments </a>
+            </li>
+            {% if object.host == user %}
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#mapLocation"> Location </a>
+            </li>
+            {% endif %}
+          </ul>
 
-          <div class="map-area">
-            <div class="card" width="300px">    
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14042.851212314717!2d-81.4256632302246!3d28.367531249999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1572850169407!5m2!1sen!2sus" height="275" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-              <div class="card-body">
-                <p class="card-text" align="center"> Events around you! </p>
+          <div class="tab-content">
+
+            <div class="tab-pane container active" id="eventInfo">
+                <!-- Event contact information -->
+                <div class="event-contact" id="eventInfo">
+                  <div class="event-information">
+                    <div class="card" width="300px">
+                      <div class="card-body" align="center">
+                        <table class="table table-md table-custom">
+                          <tr>
+                            <td>Event date: <i>{{ event.date }}</i></td>
+                            {% if event.rso == None %}
+                            <td>Hosted by: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
+                            {% else %}
+                            <td>Hosted by: <i><a href="{% url 'rso-events' event.rso.id %}">{{ event.rso }}</a></i></td>
+                            {% endif %}
+                          </tr>
+                          <tr>
+                            <td>Event time: <i>{{ event.time }}</i></td>
+                            <td>University: <i><a href="{% url 'university-events' event.university.id %}">{{ event.university }}</a></i></td>
+                          </tr> 
+                            <td>Location: <i>{{ event.place.name }}</i></td>        
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <!-- Event comment section with overflow scroll -->
+            <div class="tab-pane container fade event-comment" id="eventComments">
+                <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
+                {% for comment in object.comments.all %}
+                  <div class="comment-display">
+                     <div class="card comment-content">
+                         <p>{{comment.author}}</p>
+                         <p>{{comment.text}}</p>
+                         <p>{{comment.rating}}</p>
+                         <p>{{comment.date_posted}}</p>
+                          {% if object.comment.author == user %}
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'comment_delete' pk=event.pk%}">Delete</a>
+                          {% endif %}
+                     </div>
+                  </div>
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane container fade event-location" id="mapLocation">
+              <div class="card map-display"> 
+                <a class="btn btn-default" href="{% url 'map-view' pk=event.pk %}"> Set Location </a>
               </div>
             </div>
+
           </div>
 
-        </div>
-
-        <!-- Event comment section with overflow scroll -->
+         <!-- Event comment section with overflow scroll -->
          <div class="event-comment row">
              <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=event.pk %}">Add comment</a>
              {% for comment in object.comments.all %}
@@ -62,80 +112,13 @@
                     <p > {{comment.text}}</p>
                     <p > {{comment.rating}}</p>
                     <p > {{comment.date_posted}}</p>
+                    {% if comment.author == request.user %}
+                    <a class="btn btn-danger btn-sm mt-1" href="{% url 'comment_delete' pk=comment.pk%}">Delete</a>
+                    {% endif %}
                 </div>
              </div>
              {% endfor %}
         </div>
-
-
-        <!-- Only populate and allow admin to Update or Delete -->
-        {% if object.host == user %}
-          <div>
-            <a class="btn btn-primary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#updateModal" href="">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteModal" href="">Delete</a>
-          </div>
-
-          <!-- Update modal -->
-          <div class="modal fade" id="updateModal">
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h4 class="modal-title text-center">{{ object.title }}</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body row-md">
-                  <div class="col-md-12">
-                    <p class="event-content">{{ object.description }}</p>
-                  </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                  <button class="btn btn-success" type="submit">Update</button>
-                  <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Delete modal -->
-          <div class="modal fade" id="deleteModal">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h4 class="modal-title text-center">Delete Event</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body"> 
-                  <form method="POST">
-                      {% csrf_token %}
-                      <fieldset class="form-group">
-                          <h5>Are you sure you want to delete the event <br> "{{ object.title }}?"</h5>
-                      </fieldset>
-                      <div class="form-group">
-                          <button class="btn btn-warning" type="submit">Yes, Delete</button>
-                          <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                      </div>
-                  </form>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer"></div>
-
-              </div>
-            </div>
-          </div>
-
-        {% endif %}
-
   </article>
 {% endblock content %}
+

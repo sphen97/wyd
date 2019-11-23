@@ -36,12 +36,14 @@ INSTALLED_APPS = [
     'rso.apps.RsoConfig',
     'university.apps.UniversityConfig',
     'crispy_forms',
+    'easy_maps',
+    'location_field.apps.DefaultConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -139,5 +141,28 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'wyd.webmaster'
 EMAIL_HOST_PASSWORD = 'UCFcop4710'
 
+TIME_INPUT_FORMATS = ['%I:%M %p',]
 
-TIME_INPUT_FORMATS = ['%I:%M %p', ]
+# Maps Implementation
+LOCATION_FIELD_PATH = STATIC_URL + 'location_field'
+
+LOCATION_FIELD = {
+    'map.provider': 'google',
+    'map.zoom': 13,
+
+    'search.provider': 'google',
+    'search.suffix': '',
+
+    # Google
+    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    'provider.google.api_key': 'AIzaSyDvRGUR02NRXkM3bXDDmQy9vWxN4KSFhp8',
+    'provider.google.map_type': 'ROADMAP',
+
+    # misc
+    'resources.root_path': LOCATION_FIELD_PATH,
+    'resources.media': {
+        'js': (
+            LOCATION_FIELD_PATH + '/js/form.js',
+        ),
+    },
+}

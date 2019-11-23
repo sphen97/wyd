@@ -1,0 +1,12 @@
+{% extends "event/base.html" %}
+{% block mapcontent %}
+{{form.media}}
+<form method="POST">
+    {% csrf_token %}
+    <div class="map-section container" id="location-form">
+    	<h1>Add Location</h1>
+        {{ form }}
+        <br><button type="submit" class="save btn btn-default">Send</button>
+  	</div>
+</form>
+{% endblock %}

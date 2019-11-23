@@ -97,3 +97,7 @@ class RSOForm(forms.ModelForm):
   class Meta:
     model = RSO
     fields = ['name', 'description']
+
+class JoinForm(forms.ModelForm):
+  class Meta:
+    module = RSO

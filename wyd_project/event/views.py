@@ -1,5 +1,4 @@
 import datetime
-
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
@@ -17,10 +16,13 @@ from django.views.generic import (
 )
 from .models import Event
 from .models import Comment
+from .models import Location, Place
 from .forms import CreateEventForm , CommentForm
 from users.models import Profile
 from rso.models import RSO
 from university.models import University
+import facebook
+from django.core.mail import send_mail
 
 
 def home(request):
@@ -55,11 +57,36 @@ def create_event(request):
                 obj.approved = False
 
             obj.save()
+
+            if obj.approved == True:
+                for user in obj.rso.members.all():
+                    send_mail(
+                        obj.title,
+                        obj.description,
+                        obj.rso.admin.email,
+                        [user.email],
+                        fail_silently=True,
+                    )
+
             messages.success(request, f'Your event has been created!')
             return redirect('event-home')
     else:
         form = CreateEventForm(None, instance=request.user )
     return render(request, 'event/event_form.html', {'form': form})
+
+class PlaceCreateView(CreateView):
+    model = Place
+    template_name = 'event/coord_update_form.html'
+    success_url = '/'
+    fields = ('city', 'location',)
+
+    def set_coords(request):
+        if request.method == 'POST':
+            obj = Event()
+            obj.coord = model.location
+            obj.save()
+            messages.success(request, f'Location coordinates have been saved!')
+            return redirect('event-home')
 
 class EventListView(LoginRequiredMixin, ListView):
     model = Event
@@ -90,8 +117,9 @@ class EventListView(LoginRequiredMixin, ListView):
 class EventDetailView(DetailView):
     model = Event
 
-class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class EventDeleteView(DeleteView):
     model = Event
+    template_name = 'event/event_confirm_delete.html'
     success_url = '/'
 
     def test_func(self):
@@ -111,7 +139,6 @@ class UserEventListView(ListView):
         profile = get_object_or_404(Profile, user=self.request.user)
         school = profile.university
 
-
         events = Event.objects.none()
 
         for myRSO in RSO.objects.all().filter(members__pk=self.request.user.pk):
@@ -128,7 +155,6 @@ class UserEventListView(ListView):
 def about(request):
     return render(request, 'event/about.html', {'title': 'About'})
 
-
 def add_comment_to_post(request, pk):
     event = get_object_or_404(Event, pk=pk)
     if request.method == "POST":
@@ -144,7 +170,6 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'event/add_comment_to_post.html', {'form': form})
-
 
 class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Event
@@ -171,6 +196,7 @@ class RSOEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
         data['rso'] = get_object_or_404(RSO, pk=self.kwargs.get('pk'))
         return data
 
+
 class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Event
     template_name = 'event/university_events.html'  # <app>/<model>_<viewtype>.html
@@ -191,4 +217,22 @@ class UniversityEventListView(ListView, LoginRequiredMixin, UserPassesTestMixin)
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['university'] = get_object_or_404(University, pk=self.kwargs.get('pk'))
+        return data
+
+
+class CommentDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Comment
+    template_name = 'event/comment_confirm_delete.html'
+    success_url = '/'
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == Comment.author:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        my_comment = get_object_or_404(Comment, pk=self.kwargs.get('pk'))
+        data['event'] = my_comment.event
         return data

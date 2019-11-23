@@ -7,13 +7,13 @@ from .models import Event
 from .models import Comment
 from django.forms import TimeInput
 
+from location_field.forms.plain import PlainLocationField
 
 class CreateEventForm(forms.ModelForm):
-
     date = forms.DateField(
         widget=SelectDateWidget()
     )
-    time = forms.TimeField(help_text='12:00 AM -> 11:59 PM')
+    time = forms.TimeField(widget=forms.TextInput(attrs={'placeholder': '12:00 AM -> 11:59 PM'}))
 
     class Meta:
         model = Event
@@ -25,7 +25,7 @@ class CreateEventForm(forms.ModelForm):
         self.fields['rso'].queryset = RSO.objects.all().filter(members__pk=user.pk)
 
 
-  #commenting form for events
+#commenting form for events
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
