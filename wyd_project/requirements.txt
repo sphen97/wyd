@@ -5,7 +5,7 @@ Django==2.2.6
 django-bootstrap4==1.0.1
 django-crispy-forms==1.8.0
 idna==2.8
-Pillow==6.2.1
+Pillow==9.3.0
 pytz==2019.3
 requests==2.22.0
 soupsieve==1.9.5
